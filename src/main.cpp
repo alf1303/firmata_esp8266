@@ -26,6 +26,10 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <Firmata.h>
+// #include <ESP8266WiFi.h>
+// #include <WiFiUdp.h>
+
+// #define PORT_OUT 6455
 
 #define I2C_WRITE                   B00000000
 #define I2C_READ                    B00001000
@@ -50,6 +54,24 @@
 #ifdef FIRMATA_SERIAL_FEATURE
 SerialFirmata serialFeature;
 #endif
+
+// IPAddress apAddress(192, 168, 11, 31);
+// IPAddress apGateway(192, 168, 11, 31);
+// IPAddress apSubnet(255, 255, 255, 0);
+// IPAddress ipBroadcast(192, 168, 11, 255);
+
+// WiFiUDP wifiUDP;
+
+//Creating access point
+// void connectWiFi_AP() {
+//   WiFi.enableAP(1);
+//   WiFi.softAPConfig(apAddress, apGateway, apSubnet);
+//   WiFi.softAP("TallyNet", "11223344");
+//   delay(15);
+  // Serial1.println("INFO: Creating Access point...\n");
+  // Serial1.println("INFO: AP ipAddress: %d.%d.%d.%d\n", apAddress[0], apAddress[1], apAddress[2], apAddress[3]);
+  // Serial1.println("INFO: AP ssid: %s, AP password: %s\n", ssid, pass);
+// }
 
 /* analog inputs */
 int analogInputsToReport = 0; // bitwise array to store pin reporting
@@ -397,6 +419,15 @@ void analogWriteCallback(byte pin, int value)
 
 void digitalWriteCallback(byte port, int value)
 {
+  // digitalWrite(4, HIGH);
+  // wifiUDP.beginPacket(IPAddress(192, 168, 11, 1), PORT_OUT);
+  // wifiUDP.write(port);
+  // wifiUDP.write("00");
+  // wifiUDP.write(value);
+  // wifiUDP.endPacket();
+  // delay(400);
+  // digitalWrite(4, LOW);
+  
   byte pin, lastPin, pinValue, mask = 1, pinWriteMask = 0;
   if (port < TOTAL_PORTS) {
     // create a mask of the pins on this port that are writable.
@@ -754,6 +785,10 @@ void systemResetCallback()
 
 void setup()
 {
+  // Serial1.begin(115200);
+  // connectWiFi_AP();
+
+
   Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -777,8 +812,10 @@ void setup()
   }
 
   systemResetCallback();  // reset to default config
-  // pinMode(2, OUTPUT);
-  // pinMode(16, OUTPUT);
+  // pinMode(4, OUTPUT);
+  // pinMode(5, OUTPUT);
+  // pinMode(12, OUTPUT);
+  // pinMode(14, OUTPUT);
 }
 
 /*==============================================================================
